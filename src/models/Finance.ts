@@ -29,6 +29,15 @@ class Finance extends Model {
   @Column
   type: string
 
+  @Column
+  recurrence: boolean;
+
+  @Column
+  financeStart: Date;
+
+  @Column
+  financeEnd: Date;
+
   @CreatedAt
   createdAt: Date;
 
