@@ -16,20 +16,22 @@ financeRoutes.post("/", (req, res) => {
         userId,
         value: req.body.value,
         description: req.body.description,
-        type: req.body.type
+        type: req.body.type,
+        recurrence: req.body.recurrence
     });
 
     return res.status(201).end();
 });
 
-financeRoutes.get("/", (req, res) => {
+financeRoutes.get("/:date", (req, res) => {
     const userId = req.user.id;
     const financeRepository = new FinanceRepository();
 
     const listFinances = new ListFinancesService(
         financeRepository
     ).list({
-        userId
+        userId,
+        date: req.params.date
     });
 
     return res.json(listFinances);
