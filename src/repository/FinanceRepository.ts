@@ -19,7 +19,9 @@ class FinanceRepository implements FinanceRepositoryInterface {
         value: number,
         description: string,
         type: number,
-        recurrence: boolean
+        recurrence: boolean,
+        financeStart: string,
+        financeEnd: string
     ): Promise<Finance>
     {
         return await Finance.create({
@@ -27,7 +29,9 @@ class FinanceRepository implements FinanceRepositoryInterface {
             value,
             description,
             type,
-            recurrence
+            recurrence,
+            financeStart,
+            financeEnd
         });
     }
 

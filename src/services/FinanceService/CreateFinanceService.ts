@@ -9,6 +9,8 @@ interface Request {
     description: string;
     type: number;
     recurrence: boolean;
+    financeStart: string;
+    financeEnd: string;
 }
 
 class CreateFinanceService {
@@ -29,13 +31,16 @@ class CreateFinanceService {
             logger.info(`Criando uma finança para o usuário ${request.userId}`);
             this.validateRequestParameters(request);
 
-            await this.financeRepository.createFinance(
+            const data = await this.financeRepository.createFinance(
                 request.userId,
                 request.value,
                 request.description,
                 request.type,
-                request.recurrence
+                request.recurrence,
+                request.financeStart,
+                request.financeEnd
             );
+            console.log(data);
         } catch (error) {
             throw error;
         }
@@ -47,19 +52,21 @@ class CreateFinanceService {
      * @param {Request} request - The request object to validate.
      * @return {void} This function does not return a value.
      */
-    private validateRequestParameters(request: Request): void {
+    private async validateRequestParameters(request: Request): Promise<void> {
         const validate = new Validator().compile({
             userId: 'number|empty:false',
             value: 'number|empty:false',
             description: 'string|empty:false',
             type: 'number|empty:false',
             recurrence: 'boolean|empty:false',
+            financeStart: 'string|empty:false',
+            financeEnd: 'string|empty:false',
         });
     
-        const result = validate(request);
+        const result = await validate(request);
     
         if (Array.isArray(result)) {
-            const messageError = result[0].message || 'Erro na validação dos parâmetros.';
+            const messageError = result[0].message || 'Error validating parameters.';
             throw new AppError(messageError, 400);
         }
     }

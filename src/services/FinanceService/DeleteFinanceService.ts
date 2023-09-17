@@ -48,7 +48,7 @@ class DeleteFinanceService {
         const result = validate(request);
     
         if (Array.isArray(result)) {
-            const messageError = result[0].message || 'Erro na validação dos parâmetros.';
+            const messageError = result[0].message || 'Error validating parameters.';
             throw new AppError(messageError, 400);
         }
     }

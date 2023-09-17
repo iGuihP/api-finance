@@ -6,18 +6,20 @@ import { DeleteFinanceService } from "../services/FinanceService/DeleteFinanceSe
 
 const financeRoutes = Router();
 
-financeRoutes.post("/", (req, res) => {
+financeRoutes.post("/", async (req, res) => {
     const userId = req.user.id;
     const financeRepository = new FinanceRepository();
 
-    new CreateFinanceService(
+    await new CreateFinanceService(
         financeRepository
     ).create({
         userId,
         value: req.body.value,
         description: req.body.description,
         type: req.body.type,
-        recurrence: req.body.recurrence
+        recurrence: req.body.recurrence,
+        financeStart: req.body.financeStart,
+        financeEnd: req.body.financeEnd
     });
 
     return res.status(201).end();
@@ -45,7 +47,7 @@ financeRoutes.delete("/:id", (req, res) => {
         id: Number(req.params.id)
     });
 
-    return res.status(200);
+    return res.status(200).end();
 });
 
 export default financeRoutes;
