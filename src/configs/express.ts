@@ -3,6 +3,7 @@ import cors from 'cors'
 import route from '../routes/index';
 import logger from '../utils/logger';
 import AppError from "../errors/AppError";
+import isAuthenticatedMiddleware from "../middlewares/isAuthenticatedMiddleware";
 
 const app = express();
 
@@ -26,16 +27,18 @@ app.use(function (req: any, res: any, next: any) {
     next();
 });
 
-app.use(async (err: Error, req: Request, res: Response) => {
-    if (err instanceof AppError) {
-      logger.warn(err);
-      return res.status(err.statusCode).json({ error: err.message });
-    }
-  
-    logger.error(err);
-    return res.status(500).json({ error: "Internal server error" });
-});
-
+app.use(isAuthenticatedMiddleware);
 app.use('/', route);
+
+app.use(async (err: Error, req: Request, res: Response, _: NextFunction)  => {
+  console.log(err);
+  if (err instanceof AppError) {
+    logger.warn(err);
+    return res.status(err.statusCode).json({ error: err.message });
+  }
+
+  logger.error(err.message);
+  return res.json({ error: "Internal server error" });
+});
 
 export default app;

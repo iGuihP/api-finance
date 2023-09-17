@@ -3,10 +3,8 @@ import {
     Column,
     CreatedAt,
     UpdatedAt,
-    DataType,
     Model,
     PrimaryKey,
-    Default,
     AutoIncrement,
   } from "sequelize-typescript";
   

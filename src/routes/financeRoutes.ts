@@ -23,17 +23,16 @@ financeRoutes.post("/", (req, res) => {
     return res.status(201).end();
 });
 
-financeRoutes.get("/:date", (req, res) => {
+financeRoutes.get("/:date", async (req, res) => {
     const userId = req.user.id;
     const financeRepository = new FinanceRepository();
 
-    const listFinances = new ListFinancesService(
+    const listFinances = await new ListFinancesService(
         financeRepository
     ).list({
         userId,
         date: req.params.date
     });
-
     return res.json(listFinances);
 });
 
