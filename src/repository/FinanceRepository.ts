@@ -41,12 +41,12 @@ class FinanceRepository implements FinanceRepositoryInterface {
     async listFinancesByMonth(userId: number, date: Date): Promise<{ rows: Finance[]; count: number; }> {
         const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-        console.log(userId, startOfMonth, endOfMonth);
-    
+   
         const { rows, count } = await Finance.findAndCountAll({
             where: {
                 userId,
+                financeStart: { [Op.gte]: startOfMonth },
+                financeEnd: { [Op.lte]: endOfMonth },
             },
         });
     
