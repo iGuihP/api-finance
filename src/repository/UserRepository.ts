@@ -39,6 +39,14 @@ class UserRepository implements UserRepositoryInterface {
             }
         });
     }
+
+    async findByEmail(email: string) {
+        return await User.findOne({
+            where: {
+                email
+            }
+        });
+    }
     
 }
 
