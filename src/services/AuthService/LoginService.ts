@@ -5,6 +5,7 @@ import logger from "../../utils/logger";
 import Validator from 'fastest-validator';
 import bcrypt from 'bcrypt';
 import { sign } from 'jsonwebtoken'
+import redis from "../../configs/redis";
 
 interface Request {
     email: string;
@@ -25,6 +26,12 @@ class LoginService {
         private userRepository: UserRepository
     ) {}
 
+    /**
+     * Logs in to a user.
+     *
+     * @param {Request} request - the request object containing the user's email and password
+     * @return {Promise<Response>} - a promise that resolves to the response object containing the authentication token and user details
+     */
     public async login(request: Request): Promise<Response> {
         try {
             logger.info(`Logging in user: ${request.email}`);
@@ -33,9 +40,8 @@ class LoginService {
             const userFound = await this.findUserByEmail(request.email);
             await this.checkPassword(request.password, userFound.password);
             const token = this.generateAuthToken(userFound.email, userFound.name, userFound.id);
-
-            logger.info(`Logged in user: ${request.email}`);
-
+            await this.saveTokenInRedis(token, userFound.id);
+            
             return {
                 token,
                 userDetails: {
@@ -70,6 +76,12 @@ class LoginService {
         }
     }
 
+    /**
+     * Finds a user by email.
+     *
+     * @param {string} email - The email of the user to find.
+     * @return {Promise<User>} The user object if found.
+     */
     private async findUserByEmail(email: string) {
         const userFound = await this.userRepository.findByEmail(email);
         if(!userFound) {
@@ -79,6 +91,13 @@ class LoginService {
         return userFound;
     }
 
+    /**
+     * Check if the provided password matches the user's password.
+     *
+     * @param {string} sentPassword - The password to be checked.
+     * @param {string} userPassword - The user's password to compare against.
+     * @return {Promise<void>} - Resolves if the password is valid, otherwise throws an AppError.
+     */
     private async checkPassword(sentPassword: string, userPassword: string): Promise<void> {
         const isValidPassword = await bcrypt.compare(sentPassword, userPassword);
         if(!isValidPassword) {
@@ -86,9 +105,17 @@ class LoginService {
         }
     }
 
+    /**
+     * Generates an authentication token for a user.
+     *
+     * @param {string} userEmail - The email of the user.
+     * @param {string} userName - The name of the user.
+     * @param {number} userId - The ID of the user.
+     * @return {string} - The generated authentication token.
+     */
     private generateAuthToken(userEmail: string, userName: string, userId: number): string {
         const secret = process.env.SECRET;
-        const expiresIn = '1d';
+        const expiresIn = this.getExpiresIn();
 
         if(!secret) {
             throw new AppError('Secret not found', 500);
@@ -106,4 +133,27 @@ class LoginService {
             }
         );
     }
+
+    /**
+     * Saves the given token in Redis for the specified user ID.
+     *
+     * @param {string} token - The token to be saved.
+     * @param {number} userId - The ID of the user.
+     * @return {Promise<void>} - A promise that resolves when the token is saved.
+     */
+    private async saveTokenInRedis(token: string, userId: number): Promise<void> {
+        const expiresIn = this.getExpiresIn();
+        await redis.setEx(`session:${userId}`, expiresIn, token);
+    }
+
+    /**
+     * Returns the expiration time in milliseconds for the session.
+     *
+     * @return {number} The expiration time in milliseconds.
+     */
+    private getExpiresIn(): number {
+        return (24 * 60 * 60 * 1000) // 1 day
+    }
 }
+
+export { LoginService }

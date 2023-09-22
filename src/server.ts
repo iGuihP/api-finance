@@ -2,6 +2,7 @@ import 'dotenv/config'
 import app from './configs/express';
 import logger from './utils/logger';
 import './configs/mysql';
+import redis from './configs/redis';
 
 function startServerApp() {
     const serverPort = process.env.PORT || 3000;
