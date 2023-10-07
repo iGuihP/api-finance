@@ -1,9 +1,9 @@
 import AppError from "../../errors/AppError";
 import PaymentTransaction from "../../models/PaymentTransaction";
-import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
 import logger from "../../utils/logger";
 import dayjs from "dayjs"
 import Validator from 'fastest-validator';
+import { PaymentTransactionRepositoryInterface } from "../../repository/interfaces/PaymentTransactionRepositoryInterface";
 
 interface Request {
     userId: number;
@@ -17,9 +17,9 @@ interface Response {
 }
 
 class GetMonthlyPaymentTransactionsDetailsService {
-    private paymentTransactionRepository: PaymentTransactionRepository;
+    private paymentTransactionRepository: PaymentTransactionRepositoryInterface;
 
-    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+    constructor(paymentTransactionRepository: PaymentTransactionRepositoryInterface) {
         this.paymentTransactionRepository = paymentTransactionRepository;
     }
 

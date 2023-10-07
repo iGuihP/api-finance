@@ -1,5 +1,5 @@
 import AppError from "../../errors/AppError";
-import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
+import { PaymentTransactionRepositoryInterface } from "../../repository/interfaces/PaymentTransactionRepositoryInterface";
 import logger from "../../utils/logger";
 import Validator from 'fastest-validator';
 
@@ -11,9 +11,9 @@ interface Request {
 }
 
 class CreatePaymentTransactionService {
-    private paymentTransactionRepository: PaymentTransactionRepository;
+    private paymentTransactionRepository: PaymentTransactionRepositoryInterface;
 
-    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+    constructor(paymentTransactionRepository: PaymentTransactionRepositoryInterface) {
         this.paymentTransactionRepository = paymentTransactionRepository;
     }
 
