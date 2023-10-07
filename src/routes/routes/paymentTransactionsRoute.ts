@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { ListPaymentTransactionsService } from "../services/PaymentTransactionService/ListPaymentTransactionsService";
-import { PaymentTransactionRepository } from "../repository/PaymentTransactionRepository";
-import { CreatePaymentTransactionService } from "../services/PaymentTransactionService/CreatePaymentTransactionService";
-import { DeletePaymentTransactionService } from "../services/PaymentTransactionService/DeletePaymentTransactionService";
-import { GetMonthlyPaymentTransactionsDetailsService } from "../services/PaymentTransactionService/GetMonthlyPaymentTransactionsDetailsService";
+import { ListPaymentTransactionsService } from "../../services/paymentTransactionService/ListPaymentTransactionsService";
+import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
+import { CreatePaymentTransactionService } from "../../services/paymentTransactionService/CreatePaymentTransactionService";
+import { DeletePaymentTransactionService } from "../../services/paymentTransactionService/DeletePaymentTransactionService";
+import { GetMonthlyPaymentTransactionsDetailsService } from "../../services/paymentTransactionService/GetMonthlyPaymentTransactionsDetailsService";
 
 const paymentTransactionsRoute = Router();
 
