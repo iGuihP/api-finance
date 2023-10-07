@@ -22,7 +22,7 @@ class DeleteAccountReceivableService {
      */
     public async delete(request: Request): Promise<void> {
         try {
-            logger.info(`Deleting a payable account ID: ${request.id}`);
+            logger.info(`Deleting a receivable account ID: ${request.id}`);
 
             this.validateRequestParameters(request);
 

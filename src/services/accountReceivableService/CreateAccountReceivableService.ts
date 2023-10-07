@@ -19,7 +19,7 @@ class CreateAccountReceivableService {
 
     public async create(request: Request): Promise<void> {
         try {
-            logger.info(`Creating a payable account in the user: ${request.userId}`);
+            logger.info(`Creating a receivable account in the user: ${request.userId}`);
             this.validateRequestParameters(request);
 
             await this.accountPayableRepository.create(

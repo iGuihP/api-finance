@@ -24,7 +24,7 @@ class ListAccountReceivableService {
 
     public async list(request: Request): Promise<Response> {
         try {
-            logger.debug(`Listing a payable account on the user ID: ${request.userId}`);
+            logger.debug(`Listing a receivable account on the user ID: ${request.userId}`);
 
             this.validateRequestParameters(request);
             const {rows: accountPayables, count} = await this.accountPayableRepository.listByMonth(
