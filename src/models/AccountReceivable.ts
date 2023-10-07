@@ -9,7 +9,7 @@ import {
   } from "sequelize-typescript";
   
 @Table
-class PaymentTransaction extends Model {
+class AccountReceivable extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
@@ -22,10 +22,7 @@ class PaymentTransaction extends Model {
   value: number
 
   @Column
-  description: string
-
-  @Column
-  type: 'EXIT' | 'ENTRANCE';
+  description: string;
 
   @CreatedAt
   createdAt: Date;
@@ -34,5 +31,5 @@ class PaymentTransaction extends Model {
   updatedAt: Date;
 }
   
-export default PaymentTransaction;
+export default AccountReceivable;
   

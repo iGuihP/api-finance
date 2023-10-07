@@ -1,5 +1,6 @@
 import AppError from "../../errors/AppError";
 import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
+import { AccountPayableRepositoryInterface } from "../../repository/interfaces/AccountPayableRepositoryInterface";
 import logger from "../../utils/logger";
 import Validator from 'fastest-validator';
 
@@ -10,25 +11,19 @@ interface Request {
     type: number;
 }
 
-class CreatePaymentTransactionService {
-    private paymentTransactionRepository: PaymentTransactionRepository;
+class CreateAccountPayableService {
+    private accountPayableRepository: AccountPayableRepositoryInterface;
 
-    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
-        this.paymentTransactionRepository = paymentTransactionRepository;
+    constructor(accountPayableRepository: AccountPayableRepositoryInterface) {
+        this.accountPayableRepository = accountPayableRepository;
     }
 
-    /**
-     * Creates a finance record for the user.
-     *
-     * @param {Request} request - The request object containing user information.
-     * @return {Promise<void>} - A promise that resolves when the finance record is created.
-     */
     public async create(request: Request): Promise<void> {
         try {
-            logger.info(`Criando uma finança para o usuário ${request.userId}`);
+            logger.info(`Creating a payable account in the user: ${request.userId}`);
             this.validateRequestParameters(request);
 
-            await this.paymentTransactionRepository.create(
+            await this.accountPayableRepository.create(
                 request.userId,
                 request.value,
                 request.description,
@@ -62,4 +57,4 @@ class CreatePaymentTransactionService {
     }
 }
 
-export { CreatePaymentTransactionService };
+export { CreateAccountPayableService };
