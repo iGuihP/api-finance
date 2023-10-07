@@ -1,5 +1,4 @@
 import AppError from "../../errors/AppError";
-import { FinanceRepository } from "../../repository/FinanceRepository";
 import { UserRepository } from "../../repository/UserRepository";
 import logger from "../../utils/logger";
 import Validator from 'fastest-validator';

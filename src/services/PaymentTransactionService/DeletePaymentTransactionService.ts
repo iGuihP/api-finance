@@ -1,5 +1,5 @@
 import AppError from "../../errors/AppError";
-import { FinanceRepository } from "../../repository/FinanceRepository";
+import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
 import logger from "../../utils/logger";
 import Validator from 'fastest-validator';
 
@@ -7,11 +7,11 @@ interface Request {
     id: number;
 }
 
-class DeleteFinanceService {
-    private financeRepository: FinanceRepository;
+class DeletePaymentTransactionService {
+    private paymentTransactionRepository: PaymentTransactionRepository;
 
-    constructor(financeRepository: FinanceRepository) {
-        this.financeRepository = financeRepository;
+    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+        this.paymentTransactionRepository = paymentTransactionRepository;
     }
 
     /**
@@ -26,7 +26,7 @@ class DeleteFinanceService {
 
             this.validateRequestParameters(request);
 
-            await this.financeRepository.deleteFinance(
+            await this.paymentTransactionRepository.delete(
                 request.id
             );
         } catch (error) {
@@ -54,4 +54,4 @@ class DeleteFinanceService {
     }
 }
 
-export { DeleteFinanceService };
+export { DeletePaymentTransactionService };

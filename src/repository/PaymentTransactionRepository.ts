@@ -1,8 +1,8 @@
-import Finance from "../models/Finance";
-import { FinanceRepositoryInterface } from "./interfaces/FinanceRepositoryInterface";
+import PaymentTransaction from "../models/PaymentTransaction";
+import { PaymentTransactionRepositoryInterface } from "./interfaces/PaymentTransactionRepositoryInterface";
 import { Op } from "sequelize";
 
-class FinanceRepository implements FinanceRepositoryInterface {
+class PaymentTransactionRepository implements PaymentTransactionRepositoryInterface {
 
     /**
      * Creates a new finance record.
@@ -12,26 +12,20 @@ class FinanceRepository implements FinanceRepositoryInterface {
      * @param {string} description - The description of the finance record.
      * @param {number} type - The type of the finance record.
      * @param {boolean} recurrence - Indicates whether the finance record is recurring or not.
-     * @return {Promise<Finance>} A promise that resolves with the created finance record.
+     * @return {Promise<PaymentTransaction>} A promise that resolves with the created finance record.
      */
-    async createFinance(
+    async create(
         userId: number,
         value: number,
         description: string,
         type: number,
-        recurrence: boolean,
-        financeStart: string,
-        financeEnd: string
-    ): Promise<Finance>
+    ): Promise<PaymentTransaction>
     {
-        return await Finance.create({
+        return await PaymentTransaction.create({
             userId,
             value,
             description,
             type,
-            recurrence,
-            financeStart,
-            financeEnd
         });
     }
 
@@ -40,13 +34,13 @@ class FinanceRepository implements FinanceRepositoryInterface {
      *
      * @param {number} userId - The ID of the user.
      * @param {Date} date - The date to filter the finances.
-     * @return {Promise<{ rows: Finance[]; count: number; }>} - A promise that resolves to an object containing the list of finances and the count of finances.
+     * @return {Promise<{ rows: PaymentTransaction[]; count: number; }>} - A promise that resolves to an object containing the list of finances and the count of finances.
      */
-    async listFinancesByMonth(userId: number, date: Date): Promise<{ rows: Finance[]; count: number; }> {
+    async listByMonth(userId: number, date: Date): Promise<{ rows: PaymentTransaction[]; count: number; }> {
         const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
         const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
    
-        const { rows, count } = await Finance.findAndCountAll({
+        const { rows, count } = await PaymentTransaction.findAndCountAll({
             where: {
                 userId,
                 financeStart: { [Op.gte]: startOfMonth },
@@ -63,12 +57,12 @@ class FinanceRepository implements FinanceRepositoryInterface {
      * @param {number} financeId - The ID of the finance record to be deleted.
      * @return {Promise<void>} A promise that resolves when the finance record is deleted.
      */
-    async deleteFinance(financeId: number): Promise<void> {
-        await Finance.destroy({
+    async delete(financeId: number): Promise<void> {
+        await PaymentTransaction.destroy({
             where: { id: financeId }
         });
     }
     
 }
 
-export { FinanceRepository }
+export { PaymentTransactionRepository }

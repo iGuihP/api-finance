@@ -1,12 +1,12 @@
 import { Router } from "express";
 import userRoutes from "./userRoutes";
-import financeRoutes from "./financeRoutes";
+import paymentTransactionsRoute from "./paymentTransactionsRoute";
 import authRoutes from "./authRoutes";
 
 const routes = Router();
 
 routes.use('/auth', authRoutes);
 routes.use('/user', userRoutes);
-routes.use('/finance', financeRoutes);
+routes.use('/payment-transaction', paymentTransactionsRoute);
 
 export default routes;

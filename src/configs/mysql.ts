@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import Finance from "../models/Finance";
+import PaymentTransaction from "../models/PaymentTransaction";
 import User from "../models/User";
 
 // eslint-disable-next-line
@@ -9,7 +9,7 @@ const dbConfig = require("./database");
 const sequelize = new Sequelize(dbConfig);
 
 const models = [
-    Finance,
+    PaymentTransaction,
     User
 ];
 

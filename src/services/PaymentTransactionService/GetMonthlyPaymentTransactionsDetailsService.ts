@@ -1,6 +1,6 @@
 import AppError from "../../errors/AppError";
-import Finance from "../../models/Finance";
-import { FinanceRepository } from "../../repository/FinanceRepository";
+import PaymentTransaction from "../../models/PaymentTransaction";
+import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
 import logger from "../../utils/logger";
 import dayjs from "dayjs"
 import Validator from 'fastest-validator';
@@ -16,11 +16,11 @@ interface Response {
     balance: number;
 }
 
-class GetMonthlyFinanceDetailsService {
-    private financeRepository: FinanceRepository;
+class GetMonthlyPaymentTransactionsDetailsService {
+    private paymentTransactionRepository: PaymentTransactionRepository;
 
-    constructor(financeRepository: FinanceRepository) {
-        this.financeRepository = financeRepository;
+    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+        this.paymentTransactionRepository = paymentTransactionRepository;
     }
 
     /**
@@ -34,7 +34,7 @@ class GetMonthlyFinanceDetailsService {
             logger.debug(`Listing the user's details finance: ${request.userId}`);
 
             this.validateRequestParameters(request);
-            const {rows: finances} = await this.financeRepository.listFinancesByMonth(request.userId, dayjs(request.date).toDate());
+            const {rows: finances} = await this.paymentTransactionRepository.listByMonth(request.userId, dayjs(request.date).toDate());
             const entrances = this.sumEntrances(finances);
             const exits = this.sumExits(finances);
             const balance = this.calculateBalance(entrances, exits);
@@ -69,7 +69,7 @@ class GetMonthlyFinanceDetailsService {
         }
     }
 
-    private sumEntrances(finances: Finance[]): number {
+    private sumEntrances(finances: PaymentTransaction[]): number {
         let sum = 0;
         for (const finance of finances) {
             if (finance.type === 'ENTRANCE') {
@@ -79,7 +79,7 @@ class GetMonthlyFinanceDetailsService {
         return sum;
     }
 
-    private sumExits(finances: Finance[]): number {
+    private sumExits(finances: PaymentTransaction[]): number {
         let sum = 0;
         for (const finance of finances) {
             if (finance.type === 'EXIT') {
@@ -94,4 +94,4 @@ class GetMonthlyFinanceDetailsService {
     }
 }
 
-export { GetMonthlyFinanceDetailsService };
+export { GetMonthlyPaymentTransactionsDetailsService };

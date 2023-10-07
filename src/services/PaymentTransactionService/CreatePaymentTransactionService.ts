@@ -1,5 +1,5 @@
 import AppError from "../../errors/AppError";
-import { FinanceRepository } from "../../repository/FinanceRepository";
+import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
 import logger from "../../utils/logger";
 import Validator from 'fastest-validator';
 
@@ -8,16 +8,13 @@ interface Request {
     value: number;
     description: string;
     type: number;
-    recurrence: boolean;
-    financeStart: string;
-    financeEnd: string;
 }
 
-class CreateFinanceService {
-    private financeRepository: FinanceRepository;
+class CreatePaymentTransactionService {
+    private paymentTransactionRepository: PaymentTransactionRepository;
 
-    constructor(financeRepository: FinanceRepository) {
-        this.financeRepository = financeRepository;
+    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+        this.paymentTransactionRepository = paymentTransactionRepository;
     }
 
     /**
@@ -31,16 +28,12 @@ class CreateFinanceService {
             logger.info(`Criando uma finança para o usuário ${request.userId}`);
             this.validateRequestParameters(request);
 
-            const data = await this.financeRepository.createFinance(
+            await this.paymentTransactionRepository.create(
                 request.userId,
                 request.value,
                 request.description,
                 request.type,
-                request.recurrence,
-                request.financeStart,
-                request.financeEnd
             );
-            console.log(data);
         } catch (error) {
             throw error;
         }
@@ -72,4 +65,4 @@ class CreateFinanceService {
     }
 }
 
-export { CreateFinanceService };
+export { CreatePaymentTransactionService };

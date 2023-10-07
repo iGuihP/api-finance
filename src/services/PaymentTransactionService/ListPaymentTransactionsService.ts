@@ -1,6 +1,6 @@
 import AppError from "../../errors/AppError";
-import Finance from "../../models/Finance";
-import { FinanceRepository } from "../../repository/FinanceRepository";
+import PaymentTransaction from "../../models/PaymentTransaction";
+import { PaymentTransactionRepository } from "../../repository/PaymentTransactionRepository";
 import logger from "../../utils/logger";
 import dayjs from "dayjs"
 import Validator from 'fastest-validator';
@@ -12,14 +12,14 @@ interface Request {
 
 interface Response {
     count: number;
-    finances: Finance[];
+    finances: PaymentTransaction[];
 }
 
-class ListFinancesService {
-    private financeRepository: FinanceRepository;
+class ListPaymentTransactionsService {
+    private paymentTransactionRepository: PaymentTransactionRepository;
 
-    constructor(financeRepository: FinanceRepository) {
-        this.financeRepository = financeRepository;
+    constructor(paymentTransactionRepository: PaymentTransactionRepository) {
+        this.paymentTransactionRepository = paymentTransactionRepository;
     }
 
     /**
@@ -33,7 +33,10 @@ class ListFinancesService {
             logger.debug(`Listing the user's finances: ${request.userId}`);
 
             this.validateRequestParameters(request);
-            const {rows: finances, count} = await this.financeRepository.listFinancesByMonth(request.userId, dayjs(request.date).toDate());
+            const {rows: finances, count} = await this.paymentTransactionRepository.listByMonth(
+                request.userId,
+                dayjs(request.date).toDate()
+            );
 
             return {
                 count,
@@ -65,4 +68,4 @@ class ListFinancesService {
     }
 }
 
-export { ListFinancesService };
+export { ListPaymentTransactionsService };

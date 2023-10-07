@@ -9,7 +9,7 @@ import {
   } from "sequelize-typescript";
   
 @Table
-class Finance extends Model {
+class PaymentTransaction extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column
@@ -25,10 +25,7 @@ class Finance extends Model {
   description: string
 
   @Column
-  type: string
-
-  @Column
-  recurrence: boolean;
+  type: 'EXIT' | 'ENTRANCE';
 
   @Column
   financeStart: Date;
@@ -43,5 +40,5 @@ class Finance extends Model {
   updatedAt: Date;
 }
   
-export default Finance;
+export default PaymentTransaction;
   
