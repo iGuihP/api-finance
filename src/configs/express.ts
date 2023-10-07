@@ -1,9 +1,13 @@
+import "express-async-errors";
 import express, { Request, Response, NextFunction } from "express";
 import cors from 'cors'
 import route from '../routes/index';
 import logger from '../utils/logger';
 import AppError from "../errors/AppError";
 import isAuthenticatedMiddleware from "../middlewares/isAuthenticatedMiddleware";
+import * as Sentry from "@sentry/node";
+
+Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 const app = express();
 
@@ -27,8 +31,12 @@ app.use(function (req: any, res: any, next: any) {
     next();
 });
 
+app.use(Sentry.Handlers.requestHandler());
+
 app.use(isAuthenticatedMiddleware);
 app.use('/', route);
+
+app.use(Sentry.Handlers.errorHandler());
 
 app.use(async (err: Error, req: Request, res: Response, _: NextFunction)  => {
   console.log(err);

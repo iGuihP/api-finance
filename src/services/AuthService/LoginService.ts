@@ -114,11 +114,11 @@ class LoginService {
      * @return {string} - The generated authentication token.
      */
     private generateAuthToken(userEmail: string, userName: string, userId: number): string {
-        const secret = process.env.SECRET;
+        const secret = process.env.JWT_SECRET;
         const expiresIn = this.getExpiresIn();
 
         if(!secret) {
-            throw new AppError('Secret not found', 500);
+            throw new AppError('JWT_SECRET not found', 500);
         }
 
         return sign(
@@ -152,7 +152,7 @@ class LoginService {
      * @return {number} The expiration time in milliseconds.
      */
     private getExpiresIn(): number {
-        return (24 * 60 * 60 * 1000) // 1 day
+        return (10 * 60 * 60 * 1000) // 1 day
     }
 }
 

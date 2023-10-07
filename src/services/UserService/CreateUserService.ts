@@ -43,9 +43,9 @@ class CreateUserService {
      */
     private validateRequestParameters(request: Request): void {
         const validate = new Validator().compile({
-            name: 'number|empty:false',
-            password: 'string|empty:false',
+            name: 'string|empty:false',
             email: 'string|empty:false',
+            password: 'string|empty:false',
         });
     
         const result = validate(request);
