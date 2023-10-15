@@ -24,19 +24,15 @@ class CreatePaymentTransactionService {
      * @return {Promise<void>} - A promise that resolves when the finance record is created.
      */
     public async create(request: Request): Promise<void> {
-        try {
-            logger.info(`Criando uma finança para o usuário ${request.userId}`);
-            this.validateRequestParameters(request);
+        logger.info(`Criando uma finança para o usuário ${request.userId}`);
+        this.validateRequestParameters(request);
 
-            await this.paymentTransactionRepository.create(
-                request.userId,
-                request.value,
-                request.description,
-                request.type,
-            );
-        } catch (error) {
-            throw error;
-        }
+        await this.paymentTransactionRepository.create(
+            request.userId,
+            request.value,
+            request.description,
+            request.type,
+        );
     }
 
     /**
@@ -45,15 +41,15 @@ class CreatePaymentTransactionService {
      * @param {Request} request - The request object to validate.
      * @return {void} This function does not return a value.
      */
-    private async validateRequestParameters(request: Request): Promise<void> {
+    private validateRequestParameters(request: Request): void {
         const validate = new Validator().compile({
             userId: 'number|empty:false',
             value: 'number|empty:false',
             description: 'string|empty:false',
-            type: 'number|empty:false',
+            type: 'string|empty:false',
         });
     
-        const result = await validate(request);
+        const result = validate(request);
     
         if (Array.isArray(result)) {
             const messageError = result[0].message || 'Error validating parameters.';

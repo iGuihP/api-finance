@@ -43,8 +43,12 @@ class PaymentTransactionRepository implements PaymentTransactionRepositoryInterf
         const { rows, count } = await PaymentTransaction.findAndCountAll({
             where: {
                 userId,
-                financeStart: { [Op.gte]: startOfMonth },
-                financeEnd: { [Op.lte]: endOfMonth },
+                // financeStart: { [Op.gte]: startOfMonth },
+                // financeEnd: { [Op.lte]: endOfMonth },
+                createdAt: {
+                    [Op.gte]: startOfMonth,
+                    [Op.lte]: endOfMonth
+                }
             },
         });
     

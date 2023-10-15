@@ -5,6 +5,7 @@ import Validator from 'fastest-validator';
 import bcrypt from 'bcrypt';
 import { sign } from 'jsonwebtoken'
 import redis from "../../configs/redis";
+import User from "../../models/User";
 
 interface Request {
     email: string;
@@ -81,7 +82,7 @@ class LoginService {
      * @param {string} email - The email of the user to find.
      * @return {Promise<User>} The user object if found.
      */
-    private async findUserByEmail(email: string) {
+    private async findUserByEmail(email: string): Promise<User> {
         const userFound = await this.userRepository.findByEmail(email);
         if(!userFound) {
             throw new AppError('User not found', 404);

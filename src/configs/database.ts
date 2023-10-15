@@ -1,7 +1,8 @@
 module.exports = {
   define: {
     charset: "utf8mb4",
-    collate: "utf8mb4_bin"
+    collate: "utf8mb4_bin",
+    underscored: true,
   },
   dialect: process.env.DB_DIALECT || "mysql",
   timezone: "-03:00",
@@ -9,5 +10,5 @@ module.exports = {
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
-  logging: false
+  logging: false,
 };

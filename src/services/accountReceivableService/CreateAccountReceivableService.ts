@@ -39,7 +39,7 @@ class CreateAccountReceivableService {
      * @param {Request} request - The request object to validate.
      * @return {void} This function does not return a value.
      */
-    private async validateRequestParameters(request: Request): Promise<void> {
+    private validateRequestParameters(request: Request): void {
         const validate = new Validator().compile({
             userId: 'number|empty:false',
             value: 'number|empty:false',
@@ -47,7 +47,7 @@ class CreateAccountReceivableService {
             type: 'number|empty:false',
         });
     
-        const result = await validate(request);
+        const result = validate(request);
     
         if (Array.isArray(result)) {
             const messageError = result[0].message || 'Error validating parameters.';

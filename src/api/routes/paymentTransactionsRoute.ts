@@ -7,20 +7,24 @@ import { GetMonthlyPaymentTransactionsDetailsService } from "../../services/paym
 
 const paymentTransactionsRoute = Router();
 
-paymentTransactionsRoute.post("/", async (req, res) => {
-    const userId = req.user.id;
-    const paymentTransactionRepository = new PaymentTransactionRepository();
+paymentTransactionsRoute.post("/", async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const paymentTransactionRepository = new PaymentTransactionRepository();
 
-    await new CreatePaymentTransactionService(
-        paymentTransactionRepository
-    ).create({
-        userId,
-        value: req.body.value,
-        description: req.body.description,
-        type: req.body.type,
-    });
+        await new CreatePaymentTransactionService(
+            paymentTransactionRepository
+        ).create({
+            userId,
+            value: req.body.value,
+            description: req.body.description,
+            type: req.body.type,
+        });
 
-    return res.status(201).end();
+        return res.status(201).end();
+    } catch(error) {
+        next(error)
+    }
 });
 
 paymentTransactionsRoute.get("/:date", async (req, res) => {
